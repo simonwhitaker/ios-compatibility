@@ -1,0 +1,150 @@
+<html>
+<head>
+    <title>iOS version support amongst devices</title>
+    <script type="text/javascript" src="http://d3js.org/d3.v2.js"></script>
+    <script type="text/javascript" src="data.js"></script>
+    <style type="text/css">
+        * {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        body {
+            padding: 20px;
+            width: 840px;
+            margin: 30px auto;
+        }
+        h1 {
+            font-weight: 200;
+            font-size: 36px;
+        }
+        svg {
+            /*background-color: #eee;*/
+        }
+        svg polygon {
+        }
+        svg .iphone {
+            fill: #c88;
+        }
+        svg .iphone.alt {
+            fill: #c99;
+        }
+        svg .ipod_touch {
+            fill: #8ac;
+        }
+        svg .ipod_touch.alt {
+            fill: #9bc;
+        }
+        svg .ipad {
+            fill: #8b8;
+        }
+        svg .ipad.alt {
+            fill: #aba;
+        }
+        svg text {
+            font-size: 10pt;
+            font-weight: 400;
+            fill: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Maximum iOS versions for iOS devices</h1>
+    <div id="svg-container"></div>
+    <p>Produced by <a href="http://twitter.com/s1mn">Simon Whitaker</a> using <a href="http://d3js.org/">D3</a>.</p>
+
+    <script type="text/javascript">
+    var BAR_HEIGHT = 30;
+    var BAR_SPACING = 5; // gap between bars
+    var BAR_PADDING = 10; // padding around text inside bars
+    var SVG_PADDING = 0;
+    var SVG_WIDTH = 800;
+    var TEXT_HEIGHT = 10;
+
+    var SVG_HEIGHT = BAR_HEIGHT * dataset.flattened.length 
+                   + BAR_SPACING * (dataset.flattened.length - 1)
+                   + SVG_PADDING * 2;
+
+    var svg = d3.select('#svg-container')
+                .append('svg')
+                .attr('height', SVG_HEIGHT)
+                .attr('width', SVG_WIDTH)
+                ;
+    
+    var width_per_ios_version = (SVG_WIDTH - BAR_HEIGHT / 2 - SVG_PADDING * 2) / dataset.ios_versions.length;
+
+    // Draw the bars
+    svg.selectAll('polygon')
+        .data(dataset.flattened)
+        .enter()
+        .append('polygon')
+        .attr('points', function(d, i){
+            var x_start = SVG_PADDING;
+            var x_end = x_start;
+
+            if (d.max_ios_version === 'latest')
+                x_end += width_per_ios_version * dataset.ios_versions.length
+            else
+                x_end += width_per_ios_version * (dataset.ios_versions.indexOf(d.max_ios_version) + 1);
+            var y_start = SVG_PADDING + (BAR_HEIGHT + BAR_SPACING) * i;
+            var y_end = y_start + BAR_HEIGHT;
+
+            var points = [
+                [x_end, y_start], 
+                [x_start, y_start], 
+                [x_start, y_end],
+                [x_end, y_end]
+            ]
+
+            // If the max iOS version is "latest", give this bar an arrowhead.
+            if (d.max_ios_version === 'latest') {
+                points.push([x_end + BAR_HEIGHT / 2, y_start + BAR_HEIGHT / 2]);
+            }
+
+            return points;
+        })
+        .attr('class', function(d, i){
+            var class_value = d.family_name.toLowerCase().replace(' ', '_');
+            if (i % 2 === 0)
+                class_value = class_value + ' alt';
+            return class_value;
+        })
+        ;
+
+    // Draw the device name labels
+    svg.selectAll('text')
+        .data(dataset.flattened)
+        .enter()
+        .append('text')
+        .attr('x', SVG_PADDING + BAR_PADDING)
+        .attr('y', function(d, i){ 
+            var polygon_top = SVG_PADDING + i * (BAR_SPACING + BAR_HEIGHT);
+            return polygon_top + TEXT_HEIGHT + BAR_PADDING;
+        })
+        .text(function(d){ return d.name })
+        ;
+
+    // Draw the iOS max version labels
+    svg.selectAll('text.os_version')
+        .data(dataset.flattened)
+        .enter()
+        .append('text')
+        .attr('text-anchor', 'end')
+        .attr('x', function(d, i){
+            if (d.max_ios_version === 'latest')
+                var bar_x_end = SVG_PADDING + width_per_ios_version * dataset.ios_versions.length;
+            else
+                var bar_x_end = SVG_PADDING + width_per_ios_version * (dataset.ios_versions.indexOf(d.max_ios_version) + 1);
+            return bar_x_end - BAR_PADDING;
+        })
+        .attr('y', function(d, i){ 
+            var polygon_top = SVG_PADDING + i * (BAR_SPACING + BAR_HEIGHT);
+            return polygon_top + TEXT_HEIGHT + BAR_PADDING;
+        })
+        .text(function(d){ 
+            return d.max_ios_version 
+        })
+        .classed('os_version')
+        ;
+
+    </script>
+</body>
+</html>
