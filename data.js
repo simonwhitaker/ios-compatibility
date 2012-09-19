@@ -11,6 +11,7 @@ var dataset = {
                 { name: 'iPhone 3GS', max_ios_version: 'latest' },
                 { name: 'iPhone 4', max_ios_version: 'latest' },
                 { name: 'iPhone 4S', max_ios_version: 'latest' },
+                { name: 'iPhone 5', max_ios_version: 'latest' }
             ]
         },
         {
@@ -18,7 +19,7 @@ var dataset = {
             devices: [
                 { name: 'iPad (original)', max_ios_version: '5.1.1' },
                 { name: 'iPad 2', max_ios_version: 'latest' },
-                { name: 'The new iPad', max_ios_version: 'latest' },
+                { name: 'The new iPad', max_ios_version: 'latest' }
             ]
         },
         {
@@ -28,6 +29,7 @@ var dataset = {
                 { name: 'iPod Touch (2nd gen)', max_ios_version: '4.2.1', },
                 { name: 'iPod Touch (3rd gen)', max_ios_version: '5.1.1', },
                 { name: 'iPod Touch (4th gen)', max_ios_version: 'latest', },
+                { name: 'iPod Touch (5th gen)', max_ios_version: 'latest', }
             ]
         }
     ],
