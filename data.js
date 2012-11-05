@@ -20,7 +20,12 @@ var dataset = {
                 { name: 'iPad', max_ios_version: '5.1.1' },
                 { name: 'iPad 2', max_ios_version: 'latest' },
                 { name: 'iPad (3rd generation)', max_ios_version: 'latest' },
-                { name: 'iPad (4th generation)', max_ios_version: 'latest' },
+                { name: 'iPad (4th generation)', max_ios_version: 'latest' }
+            ]
+        },
+        {
+            name: 'iPad mini',
+            devices: [
                 { name: 'iPad mini', max_ios_version: 'latest' }
             ]
         },
